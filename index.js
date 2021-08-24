@@ -14,14 +14,36 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
-  .then(self => {
+  .then((self) => {
     console.log(`Connected to the database: "${self.connection.name}"`);
     // Before adding any recipes to the database, let's remove all existing ones
-    return Recipe.deleteMany()
+    return Recipe.deleteMany();
   })
   .then(() => {
-    // Run your code here, after you have insured that the connection was made
+    console.log('Existing receipes have been removed');
+    return Recipe.create({
+      title: 'Ratatouille',
+      level: 'Easy Peasy',
+      ingredients: [
+        'onions',
+        'eggplants',
+        'zucchinis',
+        'pepperonis',
+        'tomatoes'
+      ],
+      cuisine: 'french',
+      dishType: 'main_course',
+      creator: 'Amélie',
+      created: ''
+    })
+      .then(() => {
+        console.log('Receipe was added');
+        return mongoose.disconnect();
+      })
+      .then(() => {
+        console.log('Connection has been destroyed');
+      });
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Error connecting to the database', error);
   });
